@@ -21,21 +21,22 @@ MoveResults? turnResult = null;
 
 while (continuePlaying)
 {
-    var requiredPrompts = orchestrator.InputRequired();
-    var player1Input = GetInput(requiredPrompts.player1, orchestrator, turnResult?.player2);
-    var player2Input = GetInput(requiredPrompts.player2, orchestrator, turnResult?.player1);
+    (var player1, var player2) = orchestrator.InputRequired();
+    var player1Input = GetInput(player1, orchestrator, turnResult?.Player2);
+    var player2Input = GetInput(player2, orchestrator, turnResult?.Player1);
 
     var player1Prompt = new InputPrompt { ProvidedMove = player1Input };
     var player2Prompt = new InputPrompt { ProvidedMove = player2Input };
 
     turnResult = orchestrator.PlayTurn(player1Prompt, player2Prompt);
-    Console.WriteLine($"Player 1 chose {turnResult.player1}");
-    Console.WriteLine($"Player 2 chose {turnResult.player2}");
-    Console.WriteLine($"Result: {ResultFormats[turnResult.outcome]}");
+    Console.WriteLine($"Player 1 chose {turnResult.Player1}");
+    Console.WriteLine($"Player 2 chose {turnResult.Player2}");
+    Console.WriteLine($"Result: {ResultFormats[turnResult.Outcome]}");
 
     Console.WriteLine("Play again? Y/N");
     var answer = Console.ReadLine();
     continuePlaying = (answer == "Y" || answer == "y");
+    //TODO: add score tracking and best of n games before announcing a final winner
 }
 
 static MoveType? GetInput(InputType input, IOrchestrator orchestrator, MoveType? LastMove)
